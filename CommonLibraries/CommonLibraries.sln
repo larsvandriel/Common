@@ -9,7 +9,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common.Results", "Common.Re
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common.Extensions", "Common.Extensions\Common.Extensions.csproj", "{F017C3D8-E026-40A2-BBFA-D149B63F146D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common.Messaging.Abstractions", "Common.Application\Common.Messaging.Abstractions.csproj", "{0B1A5780-9D40-4A9F-A6FE-35C5BFB9118E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common.Messaging.Abstractions", "Common.Messaging.Abstractions\Common.Messaging.Abstractions.csproj", "{0B1A5780-9D40-4A9F-A6FE-35C5BFB9118E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common.Messaging.Async", "Common.Messaging.Async\Common.Messaging.Async.csproj", "{1B1976C3-6186-4524-BC47-2AB33E166F56}"
 EndProject
