@@ -1,0 +1,13 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace Common.Messaging.Abstractions.PubSub
+{
+    public interface IEventBus
+    {
+        IDisposable Subscribe<TEvent>(Action<TEvent> handler);
+
+        void Publish<TEvent>(TEvent @event);
+    }
+}
