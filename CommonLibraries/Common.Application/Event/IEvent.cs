@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Common.Messaging.Sync
+namespace Common.Messaging.Abstractions.Event
 {
-    internal class Class1
+    public interface IEvent
     {
     }
 }
