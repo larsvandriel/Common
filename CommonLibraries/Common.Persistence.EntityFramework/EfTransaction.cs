@@ -1,10 +1,26 @@
-﻿using System;
+﻿using Common.Persistence.Abstractions;
+using Microsoft.EntityFrameworkCore.Storage;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace Common.Persistence.EntityFramework
 {
-    internal class EfTransaction
+    public sealed class EfTransaction(IDbContextTransaction transaction) : ITransaction
     {
+        public Task CommitAsync(CancellationToken cancellationToken = default)
+        {
+            return transaction.CommitAsync(cancellationToken);
+        }
+
+        public ValueTask DisposeAsync()
+        {
+            return transaction.DisposeAsync();
+        }
+
+        public Task RollbackAsync(CancellationToken cancellationToken = default)
+        {
+            return transaction.RollbackAsync(cancellationToken);
+        }
     }
 }

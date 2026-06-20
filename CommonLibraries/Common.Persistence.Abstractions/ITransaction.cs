@@ -4,7 +4,9 @@ using System.Text;
 
 namespace Common.Persistence.Abstractions
 {
-    internal interface ITransaction
+    public interface ITransaction : IAsyncDisposable
     {
+        Task CommitAsync(CancellationToken cancellationToken = default);
+        Task RollbackAsync(CancellationToken cancellationToken = default);
     }
 }

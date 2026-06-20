@@ -4,7 +4,8 @@ using System.Text;
 
 namespace Common.Persistence.Abstractions
 {
-    internal interface ITransactionManager
+    public interface ITransactionManager
     {
+        Task<ITransaction> BeginTransactionAsync(CancellationToken cancellationToken = default);
     }
 }

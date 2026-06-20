@@ -1,7 +1,7 @@
 ﻿namespace Common.Persistence.Abstractions
 {
-    public class Class1
+    public interface IUnitOfWork
     {
-
+        Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
     }
 }
