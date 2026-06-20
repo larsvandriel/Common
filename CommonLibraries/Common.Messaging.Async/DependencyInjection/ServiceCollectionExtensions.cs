@@ -1,10 +1,11 @@
 ﻿using Common.Messaging.Abstractions.Event;
 using Common.Messaging.Abstractions.Requests;
 using Common.Messaging.Async.Events;
+using Common.Messaging.Async.Requests;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 
-namespace Common.Messaging.Async
+namespace Common.Messaging.Async.DependencyInjection
 {
     public static class ServiceCollectionExtensions
     {

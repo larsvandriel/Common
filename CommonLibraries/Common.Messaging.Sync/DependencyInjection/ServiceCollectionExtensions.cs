@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
 
-namespace Common.Messaging.Sync
+namespace Common.Messaging.Sync.DependencyInjection
 {
     public static class ServiceCollectionExtensions
     {

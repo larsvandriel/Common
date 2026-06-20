@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Common.Persistence.Abstractions\Common.Persistence.Abstractions.csproj" />
+    <ProjectReference Include="..\Common.Resilience\Common.Resilience.csproj" />
   </ItemGroup>
 
 </Project>

@@ -4,7 +4,5 @@ using System.Text;
 
 namespace Common.Messaging.Abstractions.Event
 {
-    public interface IEvent
-    {
-    }
+    public interface IEvent;
 }
