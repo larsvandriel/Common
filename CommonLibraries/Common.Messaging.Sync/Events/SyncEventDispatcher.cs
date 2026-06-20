@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Common.Messaging.Sync
+namespace Common.Messaging.Sync.Events
 {
     public sealed class SyncEventDispatcher(IServiceProvider serviceProvider) : ISyncEventDispatcher
     {

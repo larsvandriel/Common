@@ -1,19 +1,17 @@
 ﻿using Common.Messaging.Abstractions.Event;
 using Common.Messaging.Abstractions.Requests;
+using Common.Messaging.Async.Events;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
 using System.Reflection;
-using System.Text;
 
-namespace Common.Messaging.Sync
+namespace Common.Messaging.Async
 {
     public static class ServiceCollectionExtensions
     {
-        public static IServiceCollection AddCommonMessagingSync(this IServiceCollection services, params Assembly[] assemblies)
+        public static IServiceCollection AddCommonMessagingAsync(this IServiceCollection services, params Assembly[] assemblies)
         {
-            services.AddScoped<ISyncRequestDispatcher, SyncRequestDispatcher>();
-            services.AddScoped<ISyncEventDispatcher, SyncEventDispatcher>();
+            services.AddScoped<IRequestDispatcher, RequestDispatcher>();
+            services.AddScoped<IEventDispatcher, EventDispatcher>();
 
             services.RegisterHandlers(assemblies);
 
@@ -27,11 +25,11 @@ namespace Common.Messaging.Sync
             foreach (var type in types)
             {
                 var interfaces = type.GetInterfaces().Where(i =>
-                        i.IsGenericType &&
-                        (
-                            i.GetGenericTypeDefinition() == typeof(ISyncRequestHandler<,>) ||
-                            i.GetGenericTypeDefinition() == typeof(ISyncEventHandler<>)
-                        ));
+                    i.IsGenericType &&
+                    (
+                        i.GetGenericTypeDefinition() == typeof(IRequestHandler<,>) ||
+                        i.GetGenericTypeDefinition() == typeof(IEventHandler<>)
+                    ));
 
                 foreach (var serviceType in interfaces)
                 {

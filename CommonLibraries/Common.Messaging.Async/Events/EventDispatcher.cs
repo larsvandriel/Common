@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Common.Messaging.Async
+namespace Common.Messaging.Async.Events
 {
     public sealed class EventDispatcher(IServiceProvider serviceProvider) : IEventDispatcher
     {

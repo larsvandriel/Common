@@ -1,7 +1,7 @@
 ﻿using Common.Messaging.Abstractions.Requests;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Common.Messaging.Async
+namespace Common.Messaging.Async.Requests
 {
     public sealed class RequestDispatcher(IServiceProvider serviceProvider) : IRequestDispatcher
     {
