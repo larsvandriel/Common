@@ -3,16 +3,23 @@
     public class Result
     {
         public bool IsSuccess { get; }
-        public string? Error { get; }
+        public bool IsFailure => !IsSuccess;
+        public ProblemDetails? Problem { get; }
 
-        protected Result(bool isSuccess, string? error)
+        protected Result(bool isSuccess, ProblemDetails? problem)
         {
+            if (isSuccess && problem != null)
+                throw new InvalidOperationException("A successful result cannot contain a problem.");
+
+            if (!isSuccess && problem == null)
+                throw new InvalidOperationException("A failed result must contain a problem.");
+
             IsSuccess = isSuccess;
-            Error = error;
+            Problem = problem;
         }
 
         public static Result Success() => new(true, null);
 
-        public static Result Failure(string error) => new(false, error);
+        public static Result Failure(ProblemDetails problem) => new(false, problem);
     }
 }
