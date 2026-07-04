@@ -4,7 +4,8 @@ using System.Text;
 
 namespace Common.Results
 {
-    internal interface IProblemDetailEnricher
+    public interface IProblemDetailEnricher
     {
+        ProblemDetails Enrich(ProblemDetails problem);
     }
 }

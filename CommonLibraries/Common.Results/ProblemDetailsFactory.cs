@@ -33,8 +33,7 @@ namespace Common.Results
         public static ValidationProblemDetails CreateValidation(
             string type,
             string detail,
-            string field,
-            string[] errors,
+            Dictionary<string, string[]> errors,
             string? instance = null,
             string? errorCode = null,
             string? traceId = null,
@@ -51,10 +50,7 @@ namespace Common.Results
                 TraceId = traceId,
                 CorrelationId = correlationId,
                 TimeStamp = DateTimeOffset.UtcNow,
-                Errors =
-                {
-                    [field] = errors
-                }
+                Errors = errors
             };
         }
     }
