@@ -1,6 +1,7 @@
 ﻿using Common.Messaging.Abstractions.Event;
 using Common.Messaging.Abstractions.Requests;
 using Common.Messaging.Sync.Events;
+using Common.Messaging.Sync.Requests;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;

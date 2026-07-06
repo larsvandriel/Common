@@ -1,7 +1,7 @@
 ﻿using Common.Messaging.Abstractions.Requests;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Common.Messaging.Sync
+namespace Common.Messaging.Sync.Requests
 {
     public sealed class SyncRequestDispatcher(IServiceProvider serviceProvider) : ISyncRequestDispatcher
     {

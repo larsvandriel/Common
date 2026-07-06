@@ -53,5 +53,30 @@ namespace Common.Results
                 Errors = errors
             };
         }
+
+        public static ProblemDetails BusinessRule(string type, string detail, string? instance = null, string? errorCode = null)
+        {
+            return Create(type, "Business rule violation", 409, detail, instance, errorCode);
+        }
+
+        public static ProblemDetails NotFound(string type, string detail, string? instance = null, string? errorCode = null)
+        {
+            return Create(type, "Not found", 404, detail, instance, errorCode);
+        }
+
+        public static ProblemDetails Forbidden(string type, string detail, string? instance = null, string? errorCode = null)
+        {
+            return Create(type, "Forbidden", 403, detail, instance, errorCode);
+        }
+
+        public static ProblemDetails Conflict(string type, string detail, string? instance = null, string? errorCode = null)
+        {
+            return Create(type, "Conflict", 409, detail, instance, errorCode);
+        }
+
+        public static ProblemDetails Unexpected(string detail = "An unexpected error occurred.", string? instance = null)
+        {
+            return Create("error:UnexpectedError", "Unexpected error", 500, detail, instance);
+        }
     }
 }
