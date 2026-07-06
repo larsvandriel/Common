@@ -13,6 +13,7 @@ namespace Common.Results
         public string? Instance { get; set; }
 
         public string? ErrorCode { get; set; }
+        public Exception? Exception { get; set; }
 
         public string? TraceId { get; set; }
         public string? CorrelationId { get; set; }

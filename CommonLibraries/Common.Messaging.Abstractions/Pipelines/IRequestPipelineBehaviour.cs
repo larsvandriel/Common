@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Common.Messaging.Abstractions.Pipelines
 {
-    public interface IRequestPipelineBehavior<TRequest, TResult> where TRequest : IRequest<TResult>
+    public interface IRequestPipelineBehaviour<TRequest, TResult> where TRequest : IRequest<TResult>
     {
         Task<TResult> HandleAsync(TRequest request, RequestHandlerDelegate<TResult> next, CancellationToken cancellationToken = default);
     }

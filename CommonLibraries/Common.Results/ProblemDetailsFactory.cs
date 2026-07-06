@@ -13,6 +13,7 @@ namespace Common.Results
             string detail,
             string? instance = null,
             string? errorCode = null,
+            Exception? exception = null,
             string? traceId = null,
             string? correlationId = null)
         {
@@ -24,6 +25,7 @@ namespace Common.Results
                 Detail = detail,
                 Instance = instance,
                 ErrorCode = errorCode,
+                Exception = exception,
                 TraceId = traceId,
                 CorrelationId = correlationId,
                 TimeStamp = DateTimeOffset.UtcNow
@@ -36,6 +38,7 @@ namespace Common.Results
             Dictionary<string, string[]> errors,
             string? instance = null,
             string? errorCode = null,
+            Exception? exception = null,
             string? traceId = null,
             string? correlationId = null)
         {
@@ -47,6 +50,7 @@ namespace Common.Results
                 Detail = detail,
                 Instance = instance,
                 ErrorCode = errorCode,
+                Exception = exception,
                 TraceId = traceId,
                 CorrelationId = correlationId,
                 TimeStamp = DateTimeOffset.UtcNow,
@@ -74,9 +78,9 @@ namespace Common.Results
             return Create(type, "Conflict", 409, detail, instance, errorCode);
         }
 
-        public static ProblemDetails Unexpected(string detail = "An unexpected error occurred.", string? instance = null)
+        public static ProblemDetails Unexpected(Exception exception, string detail = "An unexpected error occurred.", string? instance = null)
         {
-            return Create("error:UnexpectedError", "Unexpected error", 500, detail, instance);
+            return Create("error:UnexpectedError", "Unexpected error", 500, detail, instance, exception: exception);
         }
     }
 }
