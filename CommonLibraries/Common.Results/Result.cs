@@ -27,16 +27,8 @@
     {
         private readonly T? _value;
 
-        public T? Value
-        {
-            get
-            {
-                if (IsFailure)
-                    throw new InvalidOperationException("Cannot acces Value when result is failed.");
+        public T Value => IsSuccess ? _value! : throw new InvalidOperationException("Cannot access Value when result is failed.");
 
-                return _value;
-            }
-        }
 
         private Result(bool isSuccess, T? value, ProblemDetails? problem) : base(isSuccess, problem)
         {
