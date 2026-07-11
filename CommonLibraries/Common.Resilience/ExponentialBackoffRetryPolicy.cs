@@ -9,17 +9,21 @@
 
         protected override TimeSpan CalculateDelay(int attempt)
         {
-            var exponentialDelay = TimeSpan.FromMilliseconds(_options.BaseDelay.TotalMilliseconds * Math.Pow(2, attempt - 1));
+            if (_options.BaseDelay == TimeSpan.Zero)
+                return TimeSpan.Zero;
 
-            if(exponentialDelay > _options.MaxDelay)
-                exponentialDelay = _options.MaxDelay;
+            var exponentialMultiplier = Math.Pow(2, attempt - 1);
 
-            if(!_options.UseJitter)
-                return exponentialDelay;
+            var delayMilliseconds = Math.Min(
+                _options.BaseDelay.TotalMilliseconds * exponentialMultiplier,
+                _options.MaxDelay.TotalMilliseconds);
 
-            var jitter = Random.Shared.Next(0, 100);
+            if (_options.UseJitter)
+                delayMilliseconds *= Random.Shared.NextDouble() * 0.5 + 0.75;
 
-            return exponentialDelay + TimeSpan.FromMilliseconds(jitter);
+            delayMilliseconds = Math.Min(delayMilliseconds, _options.MaxDelay.TotalMilliseconds);
+
+            return TimeSpan.FromMilliseconds(delayMilliseconds);
         }
     }
 }

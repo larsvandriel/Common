@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Options;
 
-namespace Common.Persistence.Resilience
+namespace Common.Persistence.Resilience.Retry
 {
     public sealed class TransactionalRetryOptionsValidator : IValidateOptions<TransactionalRetryOptions>
     {

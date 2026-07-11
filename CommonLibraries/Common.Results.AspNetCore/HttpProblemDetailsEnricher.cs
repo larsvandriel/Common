@@ -3,7 +3,7 @@ using System.Diagnostics;
 
 namespace Common.Results.AspNetCore
 {
-    public class HttpProblemDetailsEnricher (IHttpContextAccessor httpContextAccessor) : IProblemDetailEnricher
+    public sealed class HttpProblemDetailsEnricher (IHttpContextAccessor httpContextAccessor) : IProblemDetailEnricher
     {
         private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
 

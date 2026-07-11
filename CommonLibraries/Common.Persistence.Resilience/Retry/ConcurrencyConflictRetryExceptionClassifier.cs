@@ -1,6 +1,6 @@
 ﻿using Common.Persistence.Concurrency;
 
-namespace Common.Resilience.Transactional
+namespace Common.Persistence.Resilience.Retry
 {
     public sealed class ConcurrencyConflictRetryExceptionClassifier : ITransactionalRetryExceptionClassifier
     {

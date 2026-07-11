@@ -1,7 +1,7 @@
 ﻿using Common.Results;
 using Microsoft.Extensions.Logging;
 
-namespace Common.Persistence.Transactions
+namespace Common.Persistence.Transactions.Execution
 {
     public sealed class TransactionalAttemptExecutor(
         ITransactionManager transactionManager,

@@ -1,6 +1,6 @@
 ﻿using Common.Results;
 
-namespace Common.Persistence.Resilience
+namespace Common.Persistence.Resilience.Execution
 {
     public interface IResilientTransactionalExecutor
     {

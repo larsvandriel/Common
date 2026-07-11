@@ -1,6 +1,6 @@
 ﻿using Common.Results;
 
-namespace Common.Persistence.Transactions
+namespace Common.Persistence.Transactions.Execution
 {
     public interface ITransactionalAttemptExecutor
     {

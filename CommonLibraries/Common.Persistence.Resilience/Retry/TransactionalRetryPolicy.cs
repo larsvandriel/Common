@@ -1,8 +1,7 @@
-﻿using Common.Persistence.Resilience;
-using Microsoft.Extensions.Options;
+﻿using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Logging;
 
-namespace Common.Resilience.Transactional
+namespace Common.Persistence.Resilience.Retry
 {
     public sealed class TransactionalRetryPolicy : ITransactionalRetryPolicy
     {
@@ -86,6 +85,8 @@ namespace Common.Resilience.Transactional
 
             if (_options.UseJitter)
                 delayMilliseconds *= Random.Shared.NextDouble() * 0.5 + 0.75;
+
+            delayMilliseconds = Math.Min(delayMilliseconds, _options.MaximumDelay.TotalMilliseconds);
 
             return TimeSpan.FromMilliseconds(delayMilliseconds);
         }

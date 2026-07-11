@@ -1,8 +1,9 @@
 ﻿using Common.Results;
-using Common.Persistence.Transactions;
 using Microsoft.Extensions.DependencyInjection;
+using Common.Persistence.Transactions.Execution;
+using Common.Persistence.Resilience.Retry;
 
-namespace Common.Persistence.Resilience
+namespace Common.Persistence.Resilience.Execution
 {
     public sealed class ResilientTransactionalExecutor(
         IServiceScopeFactory scopeFactory,

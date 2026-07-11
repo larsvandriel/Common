@@ -1,4 +1,4 @@
-﻿namespace Common.Resilience.Transactional
+﻿namespace Common.Persistence.Resilience.Retry
 {
     public interface ITransactionalRetryExceptionClassifier
     {

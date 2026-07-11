@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Common.Persistence.EntityFramework
 {
-    public sealed class EfUnitOfWork(DbContext dbContext) : IUnitOfWork
+    public sealed class EfUnitOfWork<TDbContext>(TDbContext dbContext) : IUnitOfWork where TDbContext : DbContext
     {
         private readonly DbContext _dbContext = dbContext;
 
