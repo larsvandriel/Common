@@ -7,8 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Common.Persistence.Abstractions\Common.Persistence.Abstractions.csproj" />
+    <None Remove="ay1gdgam.2os~" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Common.Resilience\Common.Resilience.csproj" />
+    <ProjectReference Include="..\Common.Results\Common.Results.csproj" />
   </ItemGroup>
 
 </Project>

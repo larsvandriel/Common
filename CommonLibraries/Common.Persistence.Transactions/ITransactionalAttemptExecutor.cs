@@ -3,9 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Common.Persistence.Abstractions
+namespace Common.Persistence.Transactions
 {
-    public interface ITransactionalExecutor
+    public interface ITransactionalAttemptExecutor
     {
         Task<Result> ExecuteAsync(Func<CancellationToken, Task<Result>> action, CancellationToken cancellationToken = default);
 

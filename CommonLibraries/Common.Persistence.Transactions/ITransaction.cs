@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Common.Persistence.Abstractions
+namespace Common.Persistence.Transactions
 {
     public interface ITransaction : IAsyncDisposable
     {

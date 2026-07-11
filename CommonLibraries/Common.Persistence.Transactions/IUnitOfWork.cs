@@ -1,4 +1,4 @@
-﻿namespace Common.Persistence.Abstractions
+﻿namespace Common.Persistence.Transactions
 {
     public interface IUnitOfWork
     {
