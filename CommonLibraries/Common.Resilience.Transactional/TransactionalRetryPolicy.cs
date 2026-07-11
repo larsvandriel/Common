@@ -1,11 +1,6 @@
-﻿using Common.Persistence.Concurrency;
-using Common.Persistence.Resilience;
-using Microsoft.Extensions.Logging;
+﻿using Common.Persistence.Resilience;
 using Microsoft.Extensions.Options;
-using System;
-using System.Collections.Generic;
-using System.Runtime.InteropServices.Marshalling;
-using System.Text;
+using Microsoft.Extensions.Logging;
 
 namespace Common.Resilience.Transactional
 {

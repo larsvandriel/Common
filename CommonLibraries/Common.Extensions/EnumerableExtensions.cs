@@ -1,6 +1,4 @@
-﻿using System.Runtime.CompilerServices;
-
-namespace Common.Extensions
+﻿namespace Common.Extensions
 {
     public static class EnumerableExtensions
     {

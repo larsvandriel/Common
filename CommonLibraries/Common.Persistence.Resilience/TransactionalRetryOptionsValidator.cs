@@ -1,11 +1,8 @@
 ﻿using Microsoft.Extensions.Options;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Common.Persistence.Resilience
 {
-    public class TransactionalRetryOptionsValidator : IValidateOptions<TransactionalRetryOptions>
+    public sealed class TransactionalRetryOptionsValidator : IValidateOptions<TransactionalRetryOptions>
     {
         public ValidateOptionsResult Validate(string? name, TransactionalRetryOptions options)
         {
@@ -18,7 +15,7 @@ namespace Common.Persistence.Resilience
                 errors.Add($"{nameof(options.InitialDelay)} cannot be negative.");
 
             if (options.MaximumDelay < TimeSpan.Zero)
-                errors.Add($"{nameof(options.MaximumDelay)} cannot be nagative.");
+                errors.Add($"{nameof(options.MaximumDelay)} cannot be negative.");
 
             if (options.MaximumDelay < options.InitialDelay)
                 errors.Add($"{nameof(options.MaximumDelay)} must be greater than or equal to {nameof(options.InitialDelay)}.");

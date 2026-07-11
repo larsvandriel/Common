@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Common.Resilience.Transactional
+﻿namespace Common.Resilience.Transactional
 {
     public interface ITransactionalRetryExceptionClassifier
     {

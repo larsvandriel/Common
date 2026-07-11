@@ -1,10 +1,9 @@
 ﻿using Common.Results;
 using Microsoft.Extensions.Logging;
-using System.Runtime.InteropServices.Marshalling;
 
 namespace Common.Persistence.Transactions
 {
-    public class TransactionalAttemptExecutor(
+    public sealed class TransactionalAttemptExecutor(
         ITransactionManager transactionManager,
         IUnitOfWork unitOfwork,
         ILogger<TransactionalAttemptExecutor> logger)

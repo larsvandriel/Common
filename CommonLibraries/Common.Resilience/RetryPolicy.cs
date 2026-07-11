@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Common.Resilience
+﻿namespace Common.Resilience
 {
     public abstract class RetryPolicy : IRetryPolicy
     {

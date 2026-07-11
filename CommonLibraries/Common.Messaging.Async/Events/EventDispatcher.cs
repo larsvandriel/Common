@@ -1,8 +1,5 @@
 ﻿using Common.Messaging.Abstractions.Event;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Common.Messaging.Async.Events
 {

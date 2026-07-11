@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Common.Messaging.Abstractions.PubSub
+﻿namespace Common.Messaging.Abstractions.PubSub
 {
     public interface IAsyncEventBus
     {
