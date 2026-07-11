@@ -1,19 +1,24 @@
 ﻿using Common.Resilience;
 using Common.Results;
+using Microsoft.Extensions.Logging;
 using System.Runtime.InteropServices.Marshalling;
 
 namespace Common.Persistence.Transactions
 {
-    public class TransactionalAttemptExecutor(ITransactionManager transactionManager, IUnitOfWork unitOfwork) : ITransactionalAttemptExecutor
+    public class TransactionalAttemptExecutor(
+        ITransactionManager transactionManager,
+        IUnitOfWork unitOfwork,
+        ILogger<TransactionalAttemptExecutor> logger)
+        : ITransactionalAttemptExecutor
     {
         public Task<Result> ExecuteAsync(Func<CancellationToken, Task<Result>> action, CancellationToken cancellationToken = default)
         {
-            return ExecuteInternalAsync(action, result => !result.IsSuccess, cancellationToken);
+            return ExecuteInternalAsync(action, result => result.IsFailure, cancellationToken);
         }
 
         public Task<Result<T>> ExecuteAsync<T>(Func<CancellationToken, Task<Result<T>>> action, CancellationToken cancellationToken = default)
         {
-            return ExecuteInternalAsync(action, result => !result.IsSuccess, cancellationToken);
+            return ExecuteInternalAsync(action, result => result.IsFailure, cancellationToken);
         }
 
         private async Task<TResult> ExecuteInternalAsync<TResult>(
@@ -29,7 +34,7 @@ namespace Common.Persistence.Transactions
 
                 if (shouldRollback(result))
                 {
-                    await transaction.RollbackAsync(cancellationToken);
+                    await RollbackAsync(transaction);
                     return result;
                 }
 
@@ -38,10 +43,34 @@ namespace Common.Persistence.Transactions
 
                 return result;
             }
-            catch
+            catch(Exception originalException)
             {
-                await transaction.RollbackAsync(cancellationToken);
+                await TryRollbackAsync(transaction, originalException);
                 throw;
+            }
+        }
+
+        private static Task RollbackAsync(ITransaction transaction)
+        {
+            return transaction.RollbackAsync(CancellationToken.None);
+        }
+
+        private async Task TryRollbackAsync(ITransaction transaction, Exception originalException)
+        {
+            try
+            {
+                await RollbackAsync(transaction);
+            }
+            catch(Exception rollbackException)
+            {
+                logger.LogError(rollbackException,
+                    """
+                    Rolling back the transaction failed after an earlier exception.
+                    The original exception will be rethrown.
+                    Original exception: {OrignalExceptionType}: {OriginalExceptionMessage}
+                    """,
+                    originalException.GetType().FullName,
+                    originalException.Message);
             }
         }
     }
