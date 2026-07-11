@@ -1,9 +1,4 @@
-﻿using Common.Resilience;
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Common.Persistence.Resilience
+﻿namespace Common.Persistence.Resilience
 {
     public interface ITransactionalRetryPolicy
     {

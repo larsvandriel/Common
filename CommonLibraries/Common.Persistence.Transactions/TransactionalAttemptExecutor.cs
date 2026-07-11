@@ -1,5 +1,4 @@
-﻿using Common.Resilience;
-using Common.Results;
+﻿using Common.Results;
 using Microsoft.Extensions.Logging;
 using System.Runtime.InteropServices.Marshalling;
 

@@ -6,11 +6,11 @@ namespace Common.Persistence.Resilience
 {
     public sealed class TransactionalRetryOptions
     {
-        public const string SectionName = "Persistence: TransactionalRetry";
+        public const string SectionName = "Persistence:TransactionalRetry";
 
         public int MaxAttempts { get; init; } = 3;
 
-        public TimeSpan InitalDelay { get; init; } = TimeSpan.FromMilliseconds(20);
+        public TimeSpan InitialDelay { get; init; } = TimeSpan.FromMilliseconds(20);
 
         public TimeSpan MaximumDelay { get; init; } = TimeSpan.FromMilliseconds(250);
 
