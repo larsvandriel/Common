@@ -5,8 +5,10 @@ namespace Common.Persistence.EntityFramework.SqlServer.DependencyInjection
 {
     public static class ServiceCollectionExtensions
     {
-        public static IServiceCollection AddSqlServerConflictDetector(this IServiceCollection services)
+        public static IServiceCollection AddSqlServerDuplicateKeyConflictDetection(this IServiceCollection services)
         {
+            ArgumentNullException.ThrowIfNull(services);
+
             services.TryAddEnumerable(ServiceDescriptor.Singleton<IDbUpdateConcurrencyConflictDetector, SqlServerDuplicateKeyConflictDetector>());
 
             return services;

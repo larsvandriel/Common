@@ -1,7 +1,6 @@
 ﻿using Common.Persistence.Concurrency;
 using Common.Persistence.Transactions;
 using Microsoft.EntityFrameworkCore;
-using System.Data.SqlTypes;
 
 namespace Common.Persistence.EntityFramework
 {

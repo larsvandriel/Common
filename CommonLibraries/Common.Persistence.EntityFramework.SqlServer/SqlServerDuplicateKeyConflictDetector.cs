@@ -10,6 +10,8 @@ namespace Common.Persistence.EntityFramework.SqlServer
 
         public bool IsConcurrencyConflict(DbUpdateException exception)
         {
+            ArgumentNullException.ThrowIfNull(exception);
+            
             var sqlException = FindSqlException(exception);
 
             return sqlException?.Errors.Cast<SqlError>().Any(error => error.Number is DuplicateIndexKey or DuplicateConstraintKey) == true;
