@@ -12,8 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Common.Persistence.Resilience\Common.Persistence.Resilience.csproj" />
-    <ProjectReference Include="..\Common.Resilience.SqlServer\Common.Resilience.SqlServer.csproj" />
+    <ProjectReference Include="..\Common.Persistence.EntityFramework\Common.Persistence.EntityFramework.csproj" />
   </ItemGroup>
 
 </Project>

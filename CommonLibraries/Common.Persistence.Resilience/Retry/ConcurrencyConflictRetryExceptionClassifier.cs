@@ -6,6 +6,8 @@ namespace Common.Persistence.Resilience.Retry
     {
         public bool IsTransient(Exception exception)
         {
+            ArgumentNullException.ThrowIfNull(exception);
+
             return exception is ConcurrencyConflictException;
         }
     }

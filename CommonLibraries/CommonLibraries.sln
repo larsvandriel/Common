@@ -39,6 +39,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common.Results.AspNetCore",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common.Persistence.Resilience.SqlServer", "Common.Persistence.Resilience.SqlServer\Common.Persistence.Resilience.SqlServer.csproj", "{E8BA6DA3-3FE5-4A9D-B5BE-80D94B4FF5C3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common.Persistence.EntityFramework.SqlServer", "Common.Persistence.EntityFramework.SqlServer\Common.Persistence.EntityFramework.SqlServer.csproj", "{39936BF8-85C0-4448-8567-04FF59000DD4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -101,6 +103,10 @@ Global
 		{E8BA6DA3-3FE5-4A9D-B5BE-80D94B4FF5C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E8BA6DA3-3FE5-4A9D-B5BE-80D94B4FF5C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E8BA6DA3-3FE5-4A9D-B5BE-80D94B4FF5C3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{39936BF8-85C0-4448-8567-04FF59000DD4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{39936BF8-85C0-4448-8567-04FF59000DD4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{39936BF8-85C0-4448-8567-04FF59000DD4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{39936BF8-85C0-4448-8567-04FF59000DD4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -118,6 +124,7 @@ Global
 		{D2D8A535-D72D-4E11-8F96-0AC8618F4C3E} = {06B453F7-AC09-410F-80DE-365F88BA193F}
 		{389AC0E5-3B8C-6524-62CB-7081F87BB186} = {060593C2-9967-42E7-9AF3-7F3938F9D51D}
 		{E8BA6DA3-3FE5-4A9D-B5BE-80D94B4FF5C3} = {06B453F7-AC09-410F-80DE-365F88BA193F}
+		{39936BF8-85C0-4448-8567-04FF59000DD4} = {06B453F7-AC09-410F-80DE-365F88BA193F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {3731E411-33C0-434F-8AB8-97FB9EFE65E8}
