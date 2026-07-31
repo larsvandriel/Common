@@ -5,10 +5,16 @@ namespace Common.Persistence.Transactions.Execution
 {
     public sealed class TransactionalAttemptExecutor(
         ITransactionManager transactionManager,
-        IUnitOfWork unitOfwork,
+        IUnitOfWork unitOfWork,
+        IEnumerable<ITransactionParticipant> participants,
         ILogger<TransactionalAttemptExecutor> logger)
         : ITransactionalAttemptExecutor
     {
+        private readonly ITransactionManager _transactionManager = transactionManager;
+        private readonly IUnitOfWork _unitOfWork = unitOfWork;
+        private readonly IReadOnlyCollection<ITransactionParticipant> _participants = [.. participants];
+        private readonly ILogger<TransactionalAttemptExecutor> _logger = logger;
+
         public Task<Result> ExecuteAsync(Func<CancellationToken, Task<Result>> action, CancellationToken cancellationToken = default)
         {
             return ExecuteInternalAsync(action, result => result.IsFailure, cancellationToken);
@@ -24,51 +30,89 @@ namespace Common.Persistence.Transactions.Execution
             Func<TResult, bool> shouldRollback,
             CancellationToken cancellationToken)
         {
-            await using var transaction = await transactionManager.BeginTransactionAsync(cancellationToken);
+            await using var transaction = await _transactionManager.BeginTransactionAsync(cancellationToken);
+
+            TResult result;
 
             try
             {
-                var result = await action(cancellationToken);
+                result = await action(cancellationToken);
 
                 if (shouldRollback(result))
                 {
-                    await RollbackAsync(transaction);
+                    await RollbackSafelyAsync(transaction);
+                    await NotifyAbortedSafelyAsync();
                     return result;
                 }
 
-                await unitOfwork.SaveChangesAsync(cancellationToken);
-                await transaction.CommitAsync(cancellationToken);
+                foreach (var participant in _participants)
+                {
+                    await participant.PrepareAsync(cancellationToken);
+                }
 
-                return result;
+                await _unitOfWork.SaveChangesAsync(cancellationToken);
+                await transaction.CommitAsync(cancellationToken);
             }
-            catch(Exception originalException)
+            catch (Exception originalException)
             {
-                await TryRollbackAsync(transaction, originalException);
+                await RollbackSafelyAsync(transaction, originalException);
+                await NotifyAbortedSafelyAsync(originalException);
                 throw;
             }
+
+            foreach (var participant in _participants)
+            {
+                await participant.CommittedAsync(CancellationToken.None);
+            }
+
+            return result;
         }
 
-        private static Task RollbackAsync(ITransaction transaction)
-        {
-            return transaction.RollbackAsync(CancellationToken.None);
-        }
-
-        private async Task TryRollbackAsync(ITransaction transaction, Exception originalException)
+        private async Task RollbackSafelyAsync(ITransaction transaction, Exception? originalException = null)
         {
             try
             {
-                await RollbackAsync(transaction);
+                await transaction.RollbackAsync(CancellationToken.None);
             }
-            catch(Exception rollbackException)
+            catch (Exception rollbackException)
             {
-                logger.LogError(rollbackException,
+                if(originalException is null)
+                {
+                    _logger.LogError(rollbackException, "Rolling back the transaction failed.");
+                    return;
+                }
+                
+                _logger.LogError(rollbackException,
                     """
                     Rolling back the transaction failed after an earlier exception.
                     The original exception will be rethrown.
-                    Original exception: {OrignalExceptionType}: {OriginalExceptionMessage}
+                    Original exception: {OriginalExceptionType}: {OriginalExceptionMessage}
                     """,
-                    originalException.GetType().FullName,
-                    originalException.Message);
+                    originalException?.GetType().FullName,
+                    originalException?.Message);
+            }
+        }
+
+        private async Task NotifyAbortedSafelyAsync(Exception? originalException = null)
+        {
+            foreach (var participant in _participants)
+            {
+                try
+                {
+
+                    await participant.AbortedAsync(CancellationToken.None);
+                }
+                catch (Exception participantException)
+                {
+                    _logger.LogError(participantException,
+                        """
+                        Transaction participant {ParticipantType} failed while handling an aborted transaction.
+                        Original exception: {OriginalExceptionType}: {OriginalExceptionMessage}
+                        """,
+                        participant.GetType().FullName,
+                        originalException?.GetType().FullName,
+                        originalException?.Message);
+                }
             }
         }
     }

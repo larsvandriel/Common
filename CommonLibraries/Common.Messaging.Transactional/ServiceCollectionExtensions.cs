@@ -1,0 +1,28 @@
+﻿using Common.Messaging.Abstractions.Event;
+using Common.Persistence.Transactions;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace Common.Messaging.Transactional
+{
+    public static class ServiceCollectionExtensions
+    {
+        public static IServiceCollection AddCommonTransactionalMessaging(this IServiceCollection services)
+        {
+            ArgumentNullException.ThrowIfNull(services);
+
+            services.TryAddScoped<TransactionalEventBuffer>();
+
+            services.TryAddScoped<ITransactionalEventBuffer>(provider => provider.GetRequiredService<TransactionalEventBuffer>());
+
+            services.TryAddScoped<ITransactionalEventCollector>(provider => provider.GetRequiredService<TransactionalEventBuffer>());
+
+            services.TryAddEnumerable(ServiceDescriptor.Scoped<ITransactionParticipant, PublishEventsAfterCommitParticipant>());
+
+            return services;
+        }
+    }
+}
