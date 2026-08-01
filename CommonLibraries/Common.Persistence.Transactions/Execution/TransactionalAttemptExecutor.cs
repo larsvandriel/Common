@@ -62,7 +62,16 @@ namespace Common.Persistence.Transactions.Execution
 
             foreach (var participant in _participants)
             {
-                await participant.CommittedAsync(CancellationToken.None);
+                try
+                {
+                    await participant.CommittedAsync(CancellationToken.None);
+                }
+                catch (Exception exception)
+                {
+                    throw new PostCommitException(
+                        $"Transaction participant '{participant.GetType().FullName}' failed after the transaction was committed.",
+                        exception);
+                }
             }
 
             return result;

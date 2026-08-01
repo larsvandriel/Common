@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Logging;
+using Common.Persistence.Transactions;
 
 namespace Common.Persistence.Resilience.Retry
 {
@@ -67,6 +68,9 @@ namespace Common.Persistence.Resilience.Retry
                 return false;
 
             if (cancellationToken.IsCancellationRequested)
+                return false;
+
+            if (exception is PostCommitException)
                 return false;
 
             return _exceptionClassifiers.Any(classifier => classifier.IsTransient(exception));
