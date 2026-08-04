@@ -2,6 +2,6 @@
 {
     public interface ISyncEventDispatcher
     {
-        void Publish<TEvent>(TEvent @event) where TEvent : IEvent;
+        void Publish<TEvent>(TEvent eventMessage) where TEvent : IEvent;
     }
 }

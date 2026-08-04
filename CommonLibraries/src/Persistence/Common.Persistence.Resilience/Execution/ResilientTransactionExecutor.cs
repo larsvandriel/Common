@@ -10,7 +10,7 @@ using Common.Persistence.Resilience.Configuration;
 
 namespace Common.Persistence.Resilience.Execution
 {
-    public sealed class ResilientTransactionExecutor(
+    public sealed partial class ResilientTransactionExecutor(
         IServiceScopeFactory scopeFactory,
         IRetryExecutor retryExecutor,
         IEnumerable<ITransactionRetryExceptionClassifier> classifiers,
@@ -74,14 +74,15 @@ namespace Common.Persistence.Resilience.Execution
 
         private Task LogRetryAsync(RetryAttempt attempt, CancellationToken cancellationToken)
         {
-            logger.LogWarning(
-                attempt.Exception,
-                "Transaction attempt {Attempt} of {MaximumAttempts} failed. Retrying after {Delay}.",
-                attempt.FailedAttempt,
-                attempt.MaximumAttempts,
-                attempt.Delay);
+            LogRetry(logger, attempt.Exception, attempt.FailedAttempt, attempt.MaximumAttempts, attempt.Delay);
 
             return Task.CompletedTask;
         }
+
+        [LoggerMessage(
+            EventId = 1009,
+            Level = LogLevel.Warning,
+            Message = "Transaction attempt {Attempt} of {MaximumAttempts} failed. Retrying after {Delay}")]
+        private static partial void LogRetry(ILogger logger, Exception exception, int attempt, int maximumAttempts, TimeSpan delay);
     }
 }

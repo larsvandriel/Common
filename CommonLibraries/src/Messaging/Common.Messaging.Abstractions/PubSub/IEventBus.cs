@@ -4,6 +4,6 @@
     {
         IDisposable Subscribe<TEvent>(Action<TEvent> handler);
 
-        void Publish<TEvent>(TEvent @event);
+        void Publish<TEvent>(TEvent eventMessage);
     }
 }

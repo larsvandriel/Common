@@ -6,10 +6,10 @@ namespace Common.Messaging.Outbox.Transactions
     {
         private readonly List<IOutboxEvent> _events = [];
 
-        public void Add(IOutboxEvent @event)
+        public void Add(IOutboxEvent eventMessage)
         {
-            ArgumentNullException.ThrowIfNull(@event);
-            _events.Add(@event);
+            ArgumentNullException.ThrowIfNull(eventMessage);
+            _events.Add(eventMessage);
         }
 
         public IReadOnlyCollection<IOutboxEvent> Drain()

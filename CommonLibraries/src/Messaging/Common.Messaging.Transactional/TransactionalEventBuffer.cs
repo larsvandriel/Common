@@ -6,10 +6,10 @@ namespace Common.Messaging.Transactional
     {
         private readonly List<IEvent> _events = [];
 
-        public void Add(IEvent @event)
+        public void Add(IEvent eventMessage)
         {
-            ArgumentNullException.ThrowIfNull(@event);
-            _events.Add(@event);
+            ArgumentNullException.ThrowIfNull(eventMessage);
+            _events.Add(eventMessage);
         }
 
         public void Clear()

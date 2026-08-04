@@ -1,0 +1,6 @@
+root = true
+
+[*.cs]
+
+# Messaging API intentionally uses established EventHandler and Delegate suffixes.
+dotnet_diagnostic.CA1711.severity = none

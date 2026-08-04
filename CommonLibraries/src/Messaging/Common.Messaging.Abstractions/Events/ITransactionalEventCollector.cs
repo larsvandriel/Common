@@ -2,6 +2,6 @@
 {
     public interface ITransactionalEventCollector
     {
-        void Add(IEvent @event);
+        void Add(IEvent eventMessage);
     }
 }

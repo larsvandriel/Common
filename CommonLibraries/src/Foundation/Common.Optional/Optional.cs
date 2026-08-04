@@ -1,4 +1,6 @@
-﻿namespace Common.Optional
+﻿#pragma warning disable CA1716 // Public C# API;
+// Optional is intentionally named to represent an optional value, and is not intended to conflict with any other APIs.
+namespace Common.Optional
 {
     public readonly struct Optional<T>(T? value)
     {
@@ -27,3 +29,4 @@
         public static implicit operator Optional<T>(T? value) => new(value);
     }
 }
+#pragma warning restore CA1716

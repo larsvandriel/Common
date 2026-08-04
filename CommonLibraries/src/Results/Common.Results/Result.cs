@@ -23,6 +23,10 @@ namespace Common.Results
         public static Result Success() => new(true, null);
 
         public static Result Failure(ProblemDetails problem) => new(false, problem);
+
+        public static Result<T> Success<T>(T value) => Result<T>.CreateSuccess(value);
+
+        public static Result<T> Failure<T>(ProblemDetails problem) => Result<T>.CreateFailure(problem);
     }
 
     public sealed class Result<T> : Result
@@ -37,10 +41,10 @@ namespace Common.Results
             _value = value;
         }
 
-        public static Result<T> Success(T value) => new(true, value, null);
+        internal static Result<T> CreateSuccess(T value) => new(true, value, null);
 
-        public static new Result<T> Failure(ProblemDetails problem) => new(false, default, problem);
+        internal static Result<T> CreateFailure(ProblemDetails problem) => new(false, default, problem);
 
-        public static implicit operator Result<T>(T value) => Success(value);
+        public static implicit operator Result<T>(T value) => CreateSuccess(value);
     }
 }

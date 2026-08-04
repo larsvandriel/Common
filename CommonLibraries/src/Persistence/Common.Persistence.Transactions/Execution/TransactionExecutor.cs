@@ -2,10 +2,11 @@
 using Common.Persistence.Transactions.Exceptions;
 using Common.Results;
 using Microsoft.Extensions.Logging;
+using System.ComponentModel.DataAnnotations;
 
 namespace Common.Persistence.Transactions.Execution
 {
-    public sealed class TransactionExecutor(
+    public sealed partial class TransactionExecutor(
         ITransactionManager transactionManager,
         IUnitOfWork unitOfWork,
         IEnumerable<ITransactionParticipant> participants,
@@ -89,18 +90,15 @@ namespace Common.Persistence.Transactions.Execution
             {
                 if(originalException is null)
                 {
-                    _logger.LogError(rollbackException, "Rolling back the transaction failed.");
+                    LogRollbackFailure(_logger, rollbackException);
                     return;
                 }
                 
-                _logger.LogError(rollbackException,
-                    """
-                    Rolling back the transaction failed after an earlier exception.
-                    The original exception will be rethrown.
-                    Original exception: {OriginalExceptionType}: {OriginalExceptionMessage}
-                    """,
-                    originalException?.GetType().FullName,
-                    originalException?.Message);
+                LogOriginalExceptionAfterRollbackFailure(
+                    _logger,
+                    originalException,
+                    originalException.GetType().FullName ?? originalException.GetType().Name,
+                    originalException.Message);
             }
         }
 
@@ -110,21 +108,69 @@ namespace Common.Persistence.Transactions.Execution
             {
                 try
                 {
-
                     await participant.AbortedAsync(CancellationToken.None);
                 }
                 catch (Exception participantException)
                 {
-                    _logger.LogError(participantException,
-                        """
-                        Transaction participant {ParticipantType} failed while handling an aborted transaction.
-                        Original exception: {OriginalExceptionType}: {OriginalExceptionMessage}
-                        """,
-                        participant.GetType().FullName,
-                        originalException?.GetType().FullName,
-                        originalException?.Message);
+                    var participantType = participant.GetType().FullName ?? participant.GetType().Name;
+
+                    if(originalException is null)
+                    {
+                        LogParticipantAbortedFailure(_logger, participantException, participantType);
+                        continue;
+                    }
+
+                    LogParticipantAbortedFailureAfterOriginalException(
+                        _logger,
+                        participantException,
+                        participantType,
+                        originalException.GetType().FullName ?? originalException.GetType().Name,
+                        originalException.Message);
                 }
             }
         }
+
+        [LoggerMessage(
+            EventId = 1005,
+            Level = LogLevel.Error,
+            Message = "Rolling back the transaction failed.")]
+        private static partial void LogRollbackFailure(ILogger logger, Exception exception);
+
+        [LoggerMessage(
+            EventId = 1006,
+            Level = LogLevel.Error,
+            Message = """
+                Rolling back the transaction failed after an earlier exception.
+                The original exception will be rethrown.
+                Original exception: {OriginalExceptionType}: {OriginalExceptionMessage}
+            """)]
+        private static partial void LogOriginalExceptionAfterRollbackFailure(
+            ILogger logger,
+            Exception exception,
+            string originalExceptionType,
+            string originalExceptionMessage);
+
+        [LoggerMessage(
+            EventId = 1007,
+            Level = LogLevel.Error,
+            Message = "Transaction participant {ParticipantType} failed while handling an aborted transaction.")]
+        private static partial void LogParticipantAbortedFailure(
+            ILogger logger,
+            Exception exception,
+            string participantType);
+
+        [LoggerMessage(
+            EventId = 1008,
+            Level = LogLevel.Error,
+            Message = """
+                Transaction participant {ParticipantType} failed while handling an aborted transaction.
+                Original exception: {OriginalExceptionType}: {OriginalExceptionMessage}
+            """)]
+        private static partial void LogParticipantAbortedFailureAfterOriginalException(
+            ILogger logger,
+            Exception exception,
+            string participantType,
+            string originalExceptionType,
+            string originalExceptionMessage);
     }
 }

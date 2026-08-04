@@ -9,11 +9,11 @@ namespace Common.Messaging.Async.Pipelines
     public sealed class ExceptionHandlingBehavior<TRequest>(
         ILogger<ExceptionHandlingBehavior<TRequest>> logger) : IRequestPipelineBehavior<TRequest, Result> where TRequest : IRequest<Result>
     {
-        public async Task<Result> HandleAsync(TRequest request, RequestHandlerDelegate<Result> next, CancellationToken cancellationToken = default)
+        public async Task<Result> HandleAsync(TRequest request, RequestHandlerDelegate<Result> continuation, CancellationToken cancellationToken = default)
         {
             try
             {
-                return await next(cancellationToken);
+                return await continuation(cancellationToken);
             }
             catch(OperationCanceledException) when (cancellationToken.IsCancellationRequested)
             {
@@ -21,7 +21,7 @@ namespace Common.Messaging.Async.Pipelines
             }
             catch(Exception exception)
             {
-                logger.LogError(exception, "An unexpected error occurred while handling the request of type {RequestType}.", typeof(TRequest).Name);
+                ExceptionHandlingLog.LogPipelineFailure(logger, exception, typeof(TRequest).Name);
 
                 return Result.Failure(ProblemDetailsFactory.Unexpected());
             }
@@ -31,11 +31,11 @@ namespace Common.Messaging.Async.Pipelines
     public sealed class ExceptionHandlingBehavior<TRequest, TValue>(
         ILogger<ExceptionHandlingBehavior<TRequest, TValue>> logger) : IRequestPipelineBehavior<TRequest, Result<TValue>> where TRequest : IRequest<Result<TValue>>
     {
-        public async Task<Result<TValue>> HandleAsync(TRequest request, RequestHandlerDelegate<Result<TValue>> next, CancellationToken cancellationToken = default)
+        public async Task<Result<TValue>> HandleAsync(TRequest request, RequestHandlerDelegate<Result<TValue>> continuation, CancellationToken cancellationToken = default)
         {
             try
             {
-                return await next(cancellationToken);
+                return await continuation(cancellationToken);
             }
             catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
             {
@@ -43,10 +43,19 @@ namespace Common.Messaging.Async.Pipelines
             }
             catch (Exception exception)
             {
-                logger.LogError(exception, "An unexpected error occurred while handling the request of type {RequestType}.", typeof(TRequest).Name);
+                ExceptionHandlingLog.LogPipelineFailure(logger, exception, typeof(TRequest).Name);
 
-                return Result<TValue>.Failure(ProblemDetailsFactory.Unexpected());
+                return Result.Failure<TValue>(ProblemDetailsFactory.Unexpected());
             }
         }
+    }
+
+    internal static partial class ExceptionHandlingLog
+    {
+        [LoggerMessage(
+            EventId = 1003,
+            Level = LogLevel.Error,
+            Message = "An unexpected error occurred while handling the request of type {RequestType}.")]
+        internal static partial void LogPipelineFailure(ILogger logger, Exception exception, string requestType);
     }
 }

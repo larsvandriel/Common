@@ -8,14 +8,14 @@ namespace Common.Messaging.Outbox.Serialization
         TimeProvider timeProvider,
         IOutboxEventTypeResolver typeResolver) : IOutboxMessageFactory
     {
-        public OutboxMessage Create(IOutboxEvent @event)
+        public OutboxMessage Create(IOutboxEvent eventMessage)
         {
-            ArgumentNullException.ThrowIfNull(@event);
+            ArgumentNullException.ThrowIfNull(eventMessage);
 
-            var eventType = @event.GetType();
+            var eventType = eventMessage.GetType();
             var typeName = typeResolver.Resolve(eventType);
 
-            var payload = JsonSerializer.Serialize(@event, eventType, serializerOptions);
+            var payload = JsonSerializer.Serialize(eventMessage, eventType, serializerOptions);
 
             return OutboxMessage.Create(Guid.NewGuid(), timeProvider.GetUtcNow(), typeName, payload);
         }

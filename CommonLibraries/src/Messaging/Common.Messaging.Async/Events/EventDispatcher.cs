@@ -19,11 +19,11 @@ namespace Common.Messaging.Async.Events
             }
         }
 
-        public Task PublishAsync(IEvent @event, CancellationToken cancellationToken = default)
+        public Task PublishAsync(IEvent eventMessage, CancellationToken cancellationToken = default)
         {
-            ArgumentNullException.ThrowIfNull(@event);
+            ArgumentNullException.ThrowIfNull(eventMessage);
 
-            return PublishRuntimeAsync((dynamic)@event, cancellationToken);
+            return PublishRuntimeAsync((dynamic)eventMessage, cancellationToken);
         }
 
         private Task PublishRuntimeAsync<TEvent>(TEvent @event, CancellationToken cancellationToken) where TEvent : IEvent

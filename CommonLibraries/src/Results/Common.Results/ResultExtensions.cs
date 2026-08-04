@@ -7,7 +7,7 @@
             if (result.IsSuccess)
                 throw new InvalidOperationException("Cannot convert a successful Result to a failure result.");
 
-            return Result<TTarget>.Failure(result.Problem!);
+            return Result.Failure<TTarget>(result.Problem!);
         }
 
         public static Result<TTarget> MapFailure<TSource, TTarget>(this Result<TSource> result)
@@ -15,7 +15,7 @@
             if (result.IsSuccess)
                 throw new InvalidOperationException("Cannot convert a successful Result to a failure result.");
 
-            return Result<TTarget>.Failure(result.Problem!);
+            return Result.Failure<TTarget>(result.Problem!);
         }
     }
 }

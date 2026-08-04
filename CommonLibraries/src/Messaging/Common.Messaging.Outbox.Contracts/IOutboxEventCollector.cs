@@ -2,6 +2,6 @@
 {
     public interface IOutboxEventCollector
     {
-        void Add(IOutboxEvent @event);
+        void Add(IOutboxEvent eventMessage);
     }
 }

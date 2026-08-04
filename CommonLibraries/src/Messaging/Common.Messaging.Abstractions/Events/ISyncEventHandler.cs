@@ -2,6 +2,6 @@
 {
     public interface ISyncEventHandler<TEvent> where TEvent : IEvent
     {
-        void Handle(TEvent @event);
+        void Handle(TEvent eventMessage);
     }
 }

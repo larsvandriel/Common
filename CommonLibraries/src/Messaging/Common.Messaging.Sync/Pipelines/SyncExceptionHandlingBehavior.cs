@@ -9,15 +9,15 @@ namespace Common.Messaging.Sync.Pipelines
     public sealed class SyncExceptionHandlingBehavior<TRequest>(
         ILogger<SyncExceptionHandlingBehavior<TRequest>> logger) : ISyncRequestPipelineBehavior<TRequest, Result> where TRequest : IRequest<Result>
     {
-        public Result Handle(TRequest request, SyncRequestHandlerDelegate<Result> next)
+        public Result Handle(TRequest request, SyncRequestHandlerDelegate<Result> continuation)
         {
             try
             {
-                return next();
+                return continuation();
             }
             catch (Exception exception)
             {
-                logger.LogError(exception, "An unexpected error occurred while handling the request of type {RequestType}.", typeof(TRequest).Name);
+                SyncExceptionHandlingLog.LogPipelineFailure(logger, exception, typeof(TRequest).Name);
 
                 return Result.Failure(ProblemDetailsFactory.Unexpected());
             }
@@ -27,17 +27,26 @@ namespace Common.Messaging.Sync.Pipelines
     public sealed class SyncExceptionHandlingBehavior<TRequest, TValue>(
         ILogger<SyncExceptionHandlingBehavior<TRequest, TValue>> logger) : ISyncRequestPipelineBehavior<TRequest, Result<TValue>> where TRequest : IRequest<Result<TValue>>
     {
-        public Result<TValue> Handle(TRequest request, SyncRequestHandlerDelegate<Result<TValue>> next)
+        public Result<TValue> Handle(TRequest request, SyncRequestHandlerDelegate<Result<TValue>> continuation)
         {
             try
             {
-                return next();
+                return continuation();
             }
             catch (Exception exception)
             {
-                logger.LogError(exception, "An unexpected error occurred while handling the request of type {RequestType}.", typeof(TRequest).Name);
-                return Result<TValue>.Failure(ProblemDetailsFactory.Unexpected());
+                SyncExceptionHandlingLog.LogPipelineFailure(logger, exception, typeof(TRequest).Name);
+                return Result.Failure<TValue>(ProblemDetailsFactory.Unexpected());
             }
         }
+    }
+
+    internal static partial class SyncExceptionHandlingLog
+    {
+        [LoggerMessage(
+            EventId = 1003,
+            Level = LogLevel.Error,
+            Message = "An unexpected error occurred while handling the request of type {RequestType}.")]
+        internal static partial void LogPipelineFailure(ILogger logger, Exception exception, string requestType);
     }
 }
