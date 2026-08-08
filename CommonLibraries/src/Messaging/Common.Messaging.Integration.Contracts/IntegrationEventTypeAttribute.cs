@@ -1,7 +1,7 @@
-﻿namespace Common.Messaging.Outbox.Contracts
+namespace Common.Messaging.Integration.Contracts
 {
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = false)]
-    public sealed class OutboxEventTypeAttribute : Attribute
+    public sealed class IntegrationEventTypeAttribute : Attribute
     {
         public string Name { get; }
 
@@ -9,10 +9,9 @@
 
         public string Identifier => $"{Name}.v{Version}";
 
-        public OutboxEventTypeAttribute(string name, int version)
+        public IntegrationEventTypeAttribute(string name, int version)
         {
             ArgumentException.ThrowIfNullOrWhiteSpace(name);
-
             ArgumentOutOfRangeException.ThrowIfNegativeOrZero(version);
 
             Name = name;

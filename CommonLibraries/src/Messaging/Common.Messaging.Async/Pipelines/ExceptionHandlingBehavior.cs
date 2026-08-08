@@ -1,4 +1,4 @@
-﻿using Common.Messaging.Abstractions.Pipelines;
+using Common.Messaging.Abstractions.Pipelines;
 using Common.Messaging.Abstractions.Requests;
 using Common.Results;
 using Common.Results.Problems;
@@ -23,7 +23,7 @@ namespace Common.Messaging.Async.Pipelines
             {
                 ExceptionHandlingLog.LogPipelineFailure(logger, exception, typeof(TRequest).Name);
 
-                return Result.Failure(ProblemDetailsFactory.Unexpected());
+                return Result.Failure(ProblemFactory.Unexpected());
             }
         }
     }
@@ -45,7 +45,7 @@ namespace Common.Messaging.Async.Pipelines
             {
                 ExceptionHandlingLog.LogPipelineFailure(logger, exception, typeof(TRequest).Name);
 
-                return Result.Failure<TValue>(ProblemDetailsFactory.Unexpected());
+                return Result.Failure<TValue>(ProblemFactory.Unexpected());
             }
         }
     }

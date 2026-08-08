@@ -1,4 +1,4 @@
-﻿using Common.Messaging.Outbox.Contracts;
+using Common.Messaging.Outbox.Contracts;
 using Common.Messaging.Outbox.Serialization;
 using Common.Persistence.Transactions.Abstractions;
 
@@ -15,7 +15,7 @@ namespace Common.Messaging.Outbox.Transactions
             if(events.Count == 0)
                 return Task.CompletedTask;
 
-            var messages = events.Select(messageFactory.Create).ToArray();
+            var messages = events.Select(eventMessage => messageFactory.Create(eventMessage)).ToArray();
 
             writer.AddRange(messages);
 

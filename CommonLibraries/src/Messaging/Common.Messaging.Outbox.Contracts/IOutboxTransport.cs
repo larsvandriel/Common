@@ -1,7 +1,9 @@
-﻿namespace Common.Messaging.Outbox.Contracts
+using Common.Messaging.Integration.Contracts;
+
+namespace Common.Messaging.Outbox.Contracts
 {
     public interface IOutboxTransport
     {
-        Task PublishAsync(OutboxMessage message, CancellationToken cancellationToken = default);
+        Task PublishAsync(IntegrationEventEnvelope envelope, CancellationToken cancellationToken = default);
     }
 }

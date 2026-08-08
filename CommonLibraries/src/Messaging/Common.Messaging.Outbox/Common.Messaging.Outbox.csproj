@@ -6,6 +6,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Persistence\Common.Persistence.Transactions\Common.Persistence.Transactions.csproj" />
+    <ProjectReference Include="..\Common.Messaging.Integration.Contracts\Common.Messaging.Integration.Contracts.csproj" />
     <ProjectReference Include="..\Common.Messaging.Outbox.Contracts\Common.Messaging.Outbox.Contracts.csproj" />
   </ItemGroup>
 </Project>

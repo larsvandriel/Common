@@ -1,4 +1,4 @@
-﻿using Common.Messaging.Outbox.Configuration;
+using Common.Messaging.Outbox.Configuration;
 using Common.Messaging.Outbox.Contracts;
 using Common.Messaging.Outbox.Processing;
 using Common.Messaging.Outbox.Serialization;
@@ -25,8 +25,6 @@ namespace Common.Messaging.Outbox.DependencyInjection
 
             services.TryAddSingleton(TimeProvider.System);
             services.TryAddSingleton(new JsonSerializerOptions(JsonSerializerDefaults.Web));
-
-            services.TryAddSingleton<IOutboxEventTypeResolver, AttributeOutboxEventTypeResolver>();
 
             services.TryAddScoped<OutboxEventBuffer>();
 

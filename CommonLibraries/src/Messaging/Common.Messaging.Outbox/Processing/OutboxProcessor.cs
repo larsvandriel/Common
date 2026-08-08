@@ -1,4 +1,4 @@
-﻿using Common.Messaging.Outbox.Configuration;
+using Common.Messaging.Outbox.Configuration;
 using Common.Messaging.Outbox.Contracts;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -37,7 +37,7 @@ namespace Common.Messaging.Outbox.Processing
         {
             try
             {
-                await transport.PublishAsync(message, cancellationToken);
+                await transport.PublishAsync(message.ToEnvelope(), cancellationToken);
             }
             catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
             {

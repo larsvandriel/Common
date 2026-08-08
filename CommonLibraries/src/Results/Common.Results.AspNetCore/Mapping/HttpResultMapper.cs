@@ -1,14 +1,12 @@
-﻿using Common.Results.Enrichment;
+using System.Diagnostics;
 using Common.Results.Problems;
 using Microsoft.AspNetCore.Http;
 using AspNetResults = Microsoft.AspNetCore.Http.Results;
 
 namespace Common.Results.AspNetCore.Mapping
 {
-    public sealed class HttpResultMapper(IEnumerable<IProblemDetailsEnricher> problemDetailsEnrichers) : IHttpResultMapper
+    public sealed class HttpResultMapper(IHttpContextAccessor httpContextAccessor, TimeProvider timeProvider) : IHttpResultMapper
     {
-        private readonly IProblemDetailsEnricher[] _problemDetailsEnrichers = [.. problemDetailsEnrichers];
-
         public IResult Map(Result result)
         {
             if (result.IsSuccess)
@@ -25,39 +23,45 @@ namespace Common.Results.AspNetCore.Mapping
             return MapProblem(result.Problem!);
         }
 
-        private IResult MapProblem(ProblemDetails problem)
+        private IResult MapProblem(Problem problem)
         {
-            var enrichedProblem = Enrich(problem);
+            var httpContext = httpContextAccessor.HttpContext;
 
-            var extensions = new Dictionary<string, object?>(enrichedProblem.Extensions);
+            var extensions = new Dictionary<string, object?>(problem.Extensions)
+            {
+                ["errorCode"] = problem.Code,
+                ["timestamp"] = timeProvider.GetUtcNow()
+            };
 
-            if(enrichedProblem.ErrorCode is not null)
-                extensions["errorCode"] = enrichedProblem.ErrorCode;
+            var traceId = Activity.Current?.TraceId.ToString();
 
-            if (enrichedProblem.TraceId is not null)
-                extensions["traceId"] = enrichedProblem.TraceId;
+            if(traceId is not null)
+                extensions["traceId"] = traceId;
 
-            if (enrichedProblem.CorrelationId is not null)
-                extensions["correlationId"] = enrichedProblem.CorrelationId;
+            if(httpContext?.TraceIdentifier is { } correlationId)
+                extensions["correlationId"] = correlationId;
 
-            extensions["timestamp"] = enrichedProblem.Timestamp;
+            if(problem is ValidationProblem validationProblem)
+                extensions["errors"] = validationProblem.Errors;
 
             return AspNetResults.Problem(
-                type: enrichedProblem.Type,
-                title: enrichedProblem.Title,
-                statusCode: enrichedProblem.Status,
-                detail: enrichedProblem.Detail,
-                instance: enrichedProblem.Instance,
+                type: $"urn:problem:{problem.Code}",
+                title: problem.Title,
+                statusCode: MapStatusCode(problem.Kind),
+                detail: problem.Detail,
+                instance: httpContext?.Request.Path.Value,
                 extensions: extensions);
         }
 
-        private ProblemDetails Enrich(ProblemDetails problem)
+        private static int MapStatusCode(ProblemKind kind) => kind switch
         {
-            foreach (var enricher in _problemDetailsEnrichers)
-            {
-                problem = enricher.Enrich(problem);
-            }
-            return problem;
-        }
+            ProblemKind.Validation => StatusCodes.Status400BadRequest,
+            ProblemKind.Unauthorized => StatusCodes.Status401Unauthorized,
+            ProblemKind.Forbidden => StatusCodes.Status403Forbidden,
+            ProblemKind.NotFound => StatusCodes.Status404NotFound,
+            ProblemKind.Conflict => StatusCodes.Status409Conflict,
+            ProblemKind.Unexpected => StatusCodes.Status500InternalServerError,
+            _ => throw new ArgumentOutOfRangeException(nameof(kind), kind, "Unknown problem kind.")
+        };
     }
 }

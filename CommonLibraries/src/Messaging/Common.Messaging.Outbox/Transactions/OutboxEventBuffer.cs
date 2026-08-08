@@ -1,18 +1,19 @@
-﻿using Common.Messaging.Outbox.Contracts;
+using Common.Messaging.Integration.Contracts;
+using Common.Messaging.Outbox.Contracts;
 
 namespace Common.Messaging.Outbox.Transactions
 {
     public sealed class OutboxEventBuffer : IOutboxEventCollector, IOutboxEventBuffer
     {
-        private readonly List<IOutboxEvent> _events = [];
+        private readonly List<IIntegrationEvent> _events = [];
 
-        public void Add(IOutboxEvent eventMessage)
+        public void Add(IIntegrationEvent integrationEvent)
         {
-            ArgumentNullException.ThrowIfNull(eventMessage);
-            _events.Add(eventMessage);
+            ArgumentNullException.ThrowIfNull(integrationEvent);
+            _events.Add(integrationEvent);
         }
 
-        public IReadOnlyCollection<IOutboxEvent> Drain()
+        public IReadOnlyCollection<IIntegrationEvent> Drain()
         {
             if (_events.Count == 0)
             {

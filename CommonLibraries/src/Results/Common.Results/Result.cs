@@ -1,4 +1,4 @@
-﻿using Common.Results.Problems;
+using Common.Results.Problems;
 
 namespace Common.Results
 {
@@ -6,9 +6,9 @@ namespace Common.Results
     {
         public bool IsSuccess { get; }
         public bool IsFailure => !IsSuccess;
-        public ProblemDetails? Problem { get; }
+        public Problem? Problem { get; }
 
-        protected Result(bool isSuccess, ProblemDetails? problem)
+        protected Result(bool isSuccess, Problem? problem)
         {
             if (isSuccess && problem != null)
                 throw new InvalidOperationException("A successful result cannot contain a problem.");
@@ -22,11 +22,11 @@ namespace Common.Results
 
         public static Result Success() => new(true, null);
 
-        public static Result Failure(ProblemDetails problem) => new(false, problem);
+        public static Result Failure(Problem problem) => new(false, problem);
 
         public static Result<T> Success<T>(T value) => Result<T>.CreateSuccess(value);
 
-        public static Result<T> Failure<T>(ProblemDetails problem) => Result<T>.CreateFailure(problem);
+        public static Result<T> Failure<T>(Problem problem) => Result<T>.CreateFailure(problem);
     }
 
     public sealed class Result<T> : Result
@@ -36,14 +36,14 @@ namespace Common.Results
         public T Value => IsSuccess ? _value! : throw new InvalidOperationException("Cannot access Value when result is failed.");
 
 
-        private Result(bool isSuccess, T? value, ProblemDetails? problem) : base(isSuccess, problem)
+        private Result(bool isSuccess, T? value, Problem? problem) : base(isSuccess, problem)
         {
             _value = value;
         }
 
         internal static Result<T> CreateSuccess(T value) => new(true, value, null);
 
-        internal static Result<T> CreateFailure(ProblemDetails problem) => new(false, default, problem);
+        internal static Result<T> CreateFailure(Problem problem) => new(false, default, problem);
 
         public static implicit operator Result<T>(T value) => CreateSuccess(value);
     }

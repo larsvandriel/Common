@@ -1,10 +1,11 @@
-﻿using Common.Messaging.Outbox.Contracts;
+using Common.Messaging.Integration.Contracts;
+using Common.Messaging.Outbox.Contracts;
 
 namespace Common.Messaging.Outbox.Transactions
 {
     public interface IOutboxEventBuffer
     {
-        IReadOnlyCollection<IOutboxEvent> Drain();
+        IReadOnlyCollection<IIntegrationEvent> Drain();
 
         void Clear();
     }

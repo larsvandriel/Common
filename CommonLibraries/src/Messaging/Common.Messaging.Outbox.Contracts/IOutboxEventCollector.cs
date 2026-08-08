@@ -1,7 +1,9 @@
-﻿namespace Common.Messaging.Outbox.Contracts
+using Common.Messaging.Integration.Contracts;
+
+namespace Common.Messaging.Outbox.Contracts
 {
     public interface IOutboxEventCollector
     {
-        void Add(IOutboxEvent eventMessage);
+        void Add(IIntegrationEvent integrationEvent);
     }
 }
